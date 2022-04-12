@@ -1,10 +1,14 @@
 describe("Timeline", () => {
+  beforeEach(() => {
+    cy.task('clearusers')
+  })
+
   it("can submit posts, when signed in, and view them", () => {
     // sign up
     cy.visit("/users/new");
     cy.get("#email").type("someone@example.com");
     cy.get("#password").type("password");
-    cy.get("#submit").click();
+    cy.get("#createAccount").click();
 
     // sign in
     cy.visit("/sessions/new");

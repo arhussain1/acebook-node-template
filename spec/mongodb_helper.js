@@ -11,7 +11,10 @@ beforeAll(function(done) {
   db.on('open', function() {
     done();
   });
+
 });
+
+
 
 afterAll(function(done) {
   mongoose.connection.close(true, function() {
