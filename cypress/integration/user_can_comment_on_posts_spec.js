@@ -41,7 +41,6 @@ describe("Commenting on posts", () => {
     cy.get("#comment-field").type("Goodbye, world!");
     cy.get("#add-comment-button").click();
 
-    cy.visit('/posts')
 
     cy.get(".post").get(".comment").contains("Goodbye, world!")
   });

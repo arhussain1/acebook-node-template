@@ -10,12 +10,13 @@
         {{this.message}}<br>
         <img src="{{this.imageUrl}}"/>
         <div id="like_count">{{this.likes.total}}</div>
-        <button id="likes" type="submit" onclick="addLike('{{this.id}}');document.location.reload(true);">Like</button>
+        <button id="likes" type="submit" onclick="addLike('{{this.id}}')">Like</button>
+
         {{this.date}}<br><br>
         {{this.userName}}
         <img src= {{this.profPic}} width="40" height="50"> <br><br>
 
-      <div>
+      <div id="comments-container">
         {{#each this.comments}}
           <div class="comment">{{this}}</div>
         {{/each}}
@@ -23,7 +24,7 @@
 
       <div id="add-comment-form">
         <input id="comment-field" type="text" name="comment" value="" required>
-        <button id="add-comment-button" type="submit" onclick="addComment('{{this.id}}');document.location.reload(true);" >Comment</button>
+        <button id="add-comment-button" type="submit" onclick="addComment('{{this.id}}');" >Comment</button>
       </div>
     </li><br><br><br>
   </div>
@@ -37,26 +38,49 @@
 
 
 <script>
-function addLike(id)  {
+  async function addLike(id)  {
+    addNewLike(id);
+
     const b = {
-      id: id
+        id: id
     }
     console.log(id)
-    fetch("/posts/update/like", { body: JSON.stringify(b), method: "PUT", headers: { 'Content-Type': 'application/json' } });
+    await fetch("/posts/update/like", { body: JSON.stringify(b), method: "PUT", headers: { 'Content-Type': 'application/json' } });
   }
 
 async function addComment(id)  {
-    const post_id = {
-      id: id,
-      comment: document.querySelector("#A"+id).querySelector('#comment-field').value,
-      update: "comments",
-    }
-    await fetch('posts/update/comment', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(post_id)
-    })
-    }
+  const comment = document.querySelector("#A"+id).querySelector('#comment-field').value
+  addNewComment(id, comment);
+  
+  const post_id = {
+    id: id,
+    comment: comment,
+  }
+  await fetch('posts/update/comment', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(post_id)
+  })
+  }
+
+  function addNewLike(id) {
+    const likeCountEl = document.querySelector("#A"+id).querySelector('#like_count') // gives number as string
+    let likeCountInt = parseInt(likeCountEl.innerHTML); 
+
+    const incrementLike = likeCountInt += 1
+
+    likeCountEl.innerHTML = incrementLike
+  }
+
+  function addNewComment(id, commentBody) {
+    const commentContainer = document.querySelector("#A"+id).querySelector('#comments-container')
+    const div = document.createElement("div");
+    div.innerHTML = commentBody
+    div.className = "comment"
+    commentContainer.append(div)
+  }
+
+
 </script>
 
 

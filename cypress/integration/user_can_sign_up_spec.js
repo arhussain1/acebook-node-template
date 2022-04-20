@@ -42,7 +42,9 @@ describe("Registration", () => {
     // second sign up
     cy.signUp();
 
-    cy.url().should("include", "/users/new");
+    cy.get(".blink").should("contain", "User email already exists")
+
+    cy.url().should("include", "/users");
     // expect error to pop up on screen
     //cy.get(".err").should("contain", "This email is in use");
 
