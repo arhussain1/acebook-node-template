@@ -37,12 +37,14 @@
 
 
 <script>
-function addLike(id)  {
+  async function addLike(id)  {
+    addNewLike(id);
+
     const b = {
-      id: id
+        id: id
     }
     console.log(id)
-    fetch("/posts/update/like", { body: JSON.stringify(b), method: "PUT", headers: { 'Content-Type': 'application/json' } });
+    await fetch("/posts/update/like", { body: JSON.stringify(b), method: "PUT", headers: { 'Content-Type': 'application/json' } });
   }
 
 async function addComment(id)  {
@@ -58,6 +60,15 @@ async function addComment(id)  {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(post_id)
   })
+  }
+
+  function addNewLike(id) {
+    const likeCountEl = document.querySelector("#A"+id).querySelector('#like_count') // gives number as string
+    let likeCountInt = parseInt(likeCountEl.innerHTML); 
+
+    const incrementLike = likeCountInt += 1
+
+    likeCountEl.innerHTML = incrementLike
   }
 
   function addNewComment(id, commentBody) {
