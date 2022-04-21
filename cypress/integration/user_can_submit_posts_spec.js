@@ -50,15 +50,11 @@ describe("Timeline", () => {
     // should be able to click the like button
     cy.contains("Like").click();
 
-    cy.visit("/posts")
-
     cy.get("#like_count").should("contain", 1)
 
     // should not add another after clicking again
 
     cy.contains("Like").click();
-
-    cy.visit("/posts")
 
     cy.get("#like_count").should("contain", 1)
 
