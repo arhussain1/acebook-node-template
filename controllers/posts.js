@@ -8,7 +8,7 @@ const PostsController = {
         throw err;
       }
         console.log(posts)
-      posts.forEach(post => post.date = moment(post.date).format('LLLL'));
+      posts.forEach(post => post.date = moment(parseInt(post.date)).format('LLLL'));
         console.log(posts)
 
       res.render("posts/index", { posts: posts, session: req.session });

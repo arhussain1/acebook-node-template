@@ -43,5 +43,6 @@ describe("Commenting on posts", () => {
 
 
     cy.get(".post").get(".comment").contains("Goodbye, world!")
+    cy.get("#comment-field").should('have.text', "");
   });
 });
