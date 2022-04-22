@@ -50,7 +50,6 @@
 
 async function addComment(id)  {
   const comment = document.querySelector("#A"+id).querySelector('#comment-field').value
-  addNewComment(id, comment);
   
   const post_id = {
     id: id,
@@ -61,10 +60,13 @@ async function addComment(id)  {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(post_id)
   })
+  addNewComment(id, comment);
   }
 
   function addNewLike(id) {
+    console.log("Hello I got called")
     const likeCountEl = document.querySelector("#A"+id).querySelector('#like_count') // gives number as string
+
     let likeCountInt = parseInt(likeCountEl.innerHTML); 
 
     const incrementLike = likeCountInt += 1
@@ -84,6 +86,32 @@ async function addComment(id)  {
 </script>
 
 
+<script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
 
 
+<h1>Real Time Messaging</h1>
+<pre id="messages" style="height: 400px; overflow: scroll"></pre>
 
+<input type="text" id="messageBox" placeholder="Type your message here" style="display: block; width: 100%; margin-bottom: 10px; padding: 10px;" />
+<button id="send" title="Send Message!" style="width: 100%; height: 30px;" onclick="runChatBox('{{this.session.user.email}}')">Send Message</button>
+
+<script>
+
+  function runChatBox(userEmail) {
+    const messages = document.querySelector('#messages');
+    const sendBtn = document.querySelector('#send');
+    const messageBox = document.querySelector('#messageBox');
+
+
+    const socket = io('ws://localhost:3000')
+
+
+    socket.on('message', text => {
+      messages.textContent += `\n\n${text}`
+    })
+
+    const text = {message: messageBox.value, user: userEmail};
+    socket.emit('message', text);
+    
+  };
+</script>

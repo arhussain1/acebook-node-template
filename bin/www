@@ -9,6 +9,9 @@ var debug = require("debug")("acebook:server");
 var http = require("http");
 var mongoose = require("mongoose");
 
+
+
+
 /**
  * Get port from environment and store in Express.
  */
@@ -34,6 +37,20 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
  */
 
 var server = http.createServer(app);
+
+const io = require('socket.io')(server, {
+  cors: { origin: "*" }
+});
+
+io.on('connection', socket => {
+  console.log('A user has connected');
+
+  socket.on('message', (message) => {
+    console.log(`here you go${message}`);
+    console.log(message.user)
+    io.emit('message', `${message.user}:  ${message.message}`);
+  })
+})
 
 /**
  * Listen on provided port, on all network interfaces.
