@@ -24,7 +24,7 @@
 
       <div id="add-comment-form">
         <input id="comment-field" type="text" name="comment" value="" required>
-        <button id="add-comment-button" type="submit" onclick="addComment('{{this.id}}');" >Comment</button>
+        <button id="add-comment-button" type="submit" onclick="addComment('{{this.id}}');document.getElementById('comment-field').value = ''">Comment</button>
       </div>
     </li><br><br><br>
   </div>
