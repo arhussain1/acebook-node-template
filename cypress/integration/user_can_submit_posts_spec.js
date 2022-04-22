@@ -28,6 +28,7 @@ describe("Timeline", () => {
     cy.get(".post").first().should("contain", "Hello, again!");
   });
 
+
   it("can only like a post once", () => {
     // sign up
     cy.signUp();
@@ -59,4 +60,5 @@ describe("Timeline", () => {
     cy.get("#like_count").should("contain", 1)
 
   });
+
 });
