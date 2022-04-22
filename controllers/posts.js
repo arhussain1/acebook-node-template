@@ -8,7 +8,7 @@ const PostsController = {
         throw err;
       }
         console.log(posts)
-      posts.forEach(post => post.date = moment(post.date).format('LLLL'));
+      posts.forEach(post => post.date = moment(parseInt(post.date)).format('LLLL'));
         console.log(posts)
 
       res.render("posts/index", { posts: posts, session: req.session });
@@ -37,7 +37,7 @@ const PostsController = {
     });
   },
 
-  UpdateComment: (req) => {
+  UpdateComment: (req, res) => {
     const comment = req.body.comment;
     const post_id = req.body.id;
 
@@ -48,34 +48,25 @@ const PostsController = {
         if (err) {
           throw err;
         }
-        console.log(doc)
+        res.status(201).send(doc)
       });
   },
-  UpdateLikes: (req) => {    
+
+  UpdateLikes: (req, res) => {    
     const email = req.session.user.email
-    // if statement that only lets new people like the post, so check if the email has already liked the post
-    Post.findById(req.body.id, (err, post) => {
+    Post.findByIdAndUpdate( req.body.id, {
+      $inc:{"likes.total":1}, $push:{"likes.who": email}
+    } ).exec((err, doc) => {
+
+
       if (err) {
         throw err;
       }
-
-      if (!post.likes.who.includes(email)) {
-        Post.findByIdAndUpdate( req.body.id, {
-          $inc:{"likes.total":1}, $push:{"likes.who": email}
-        } ).exec((err) => {
-    
-    
-          if (err) {
-            throw err;
-          }
-    
-          //redirect back to the previous page 
-        });
-      } else {
-        console.log("sorry you have already liked this post")
+      else {
+        res.status(201).send(doc)
       }
+      //redirect back to the previous page 
     })
-    // when we add 1 to the likes we also also want to add the email of the person who like it
   }
 
 };
